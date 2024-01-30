@@ -34,13 +34,26 @@
             android:text="@string/false_button" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/next_button"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next_button"
-        android:drawableEnd="@drawable/baseline_arrow_right_24" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/prev_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prev_button"
+            android:drawableStart="@drawable/baseline_arrow_left_24" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/baseline_arrow_right_24"
+            android:text="@string/next_button" />
         <!--app:icon="@drawable/baseline_arrow_right_24"
         app:iconGravity="end"-->
+
+    </LinearLayout>
 
 </LinearLayout>
