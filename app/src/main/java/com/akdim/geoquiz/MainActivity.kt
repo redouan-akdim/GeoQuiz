@@ -57,10 +57,15 @@ class MainActivity : AppCompatActivity() {
 
         binding.nextButton.setOnClickListener{
             currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
-            val questionTextResId = questionBank[currentIndex].textResID
-            binding.questionTextview.setText(questionTextResId)         // Display new question text
+            //val questionTextResId = questionBank[currentIndex].textResID
+            //binding.questionTextview.setText(questionTextResId)         // Display new question text
+            updateQuestion()
         }
 
+        updateQuestion()
+    }
+
+    private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResID        // Access the text resource ID of the current Question object
         binding.questionTextview.setText(questionTextResId)
     }
