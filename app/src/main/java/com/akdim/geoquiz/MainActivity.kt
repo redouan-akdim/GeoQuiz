@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.prevButton.setOnClickListener{
-            currentIndex = (currentIndex - 1) % questionBank.size       // Get the previous index of questionBank
+            currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size       // Get the previous index of questionBank
             updateQuestion()
         }
     }
