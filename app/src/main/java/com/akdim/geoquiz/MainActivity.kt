@@ -13,8 +13,6 @@ import com.google.android.material.snackbar.SnackbarContentLayout
 class MainActivity : AppCompatActivity() {
 
     private lateinit var  binding : ActivityMainBinding
-    //private lateinit var trueButton: Button
-    //private lateinit var falseButton: Button
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -35,31 +33,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Init Buttons
-        //trueButton = findViewById(R.id.true_button)
-        //falseButton = findViewById(R.id.false_button)
 
         /* Define event handler for onClick to show snackbars */
         binding.trueButton.setOnClickListener{
-            val snackbar = Snackbar.make(it,"Correct",Snackbar.LENGTH_LONG)
-
-            snackbar.show()
+            checkAnswer(true)
 
         }
 
         binding.falseButton.setOnClickListener{
-            val snackbar = Snackbar.make(it,"Incorrect",Snackbar.LENGTH_LONG)
-            snackbar.setTextColor(Color.BLACK)
-            snackbar.setBackgroundTint(Color.RED)
-
-            snackbar.show()
+            checkAnswer(false)
         }
 
         binding.nextButton.setOnClickListener{
-            //currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
-            //val questionTextResId = questionBank[currentIndex].textResID
-            //binding.questionTextview.setText(questionTextResId)         // Display new question text
-            //updateQuestion()
             nextQuestion()
         }
 
@@ -90,5 +75,19 @@ class MainActivity : AppCompatActivity() {
          */
         currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
         updateQuestion()
+    }
+
+    private fun checkAnswer(userAnswer: Boolean) {
+        val correctAnswer = questionBank[currentIndex].answer           // Get the correct answer of appropriate question
+
+        // Verify user's answer
+        val messageResId = if (userAnswer == correctAnswer) {
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
     }
 }
