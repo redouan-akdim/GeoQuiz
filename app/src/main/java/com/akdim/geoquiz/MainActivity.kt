@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var currentIndex = 0
+    private var counterRightAnswers = 0              // Counter of right answers
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +68,10 @@ class MainActivity : AppCompatActivity() {
         toggleBtnEnable()
     }
 
+    /**
+     * Go to the next question and update it
+     */
     private fun nextQuestion(){
-        /**
-         * Go to the next question and update it
-         */
         currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
         updateQuestion()
     }
@@ -87,8 +88,25 @@ class MainActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
 
+        // Increment counter of right answers
+        if (userAnswer == correctAnswer)
+            counterRightAnswers++
+
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+
+        // Compute score if last question is answered
+        if (currentIndex == questionBank.size - 1){
+            val formattedScore = String.format("%.1f %%",computeScore())            // Format the score accordingly
+
+            // Display the formatted score in a Toast
+            Toast.makeText(this, formattedScore, Toast.LENGTH_LONG)
+                .show()
+
+            counterRightAnswers = 0             // Reset counterRightAnswers
+        }
+
+
     }
 
     /**
@@ -98,6 +116,10 @@ class MainActivity : AppCompatActivity() {
         binding.trueButton.isEnabled = !binding.trueButton.isEnabled
         binding.falseButton.isEnabled = !binding.falseButton.isEnabled
 
+    }
+
+    private fun computeScore() : Float{
+        return counterRightAnswers.toFloat() / questionBank.size * 100
     }
 
     override fun onStart(){
