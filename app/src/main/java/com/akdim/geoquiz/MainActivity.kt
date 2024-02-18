@@ -1,15 +1,10 @@
 package com.akdim.geoquiz
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import com.akdim.geoquiz.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
 
 private const val TAG = "Mainactivity"          // Define TAG for logging
 class MainActivity : AppCompatActivity() {
@@ -27,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
     private var currentIndex = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate (Bundle?) called")          // Send a DEBUG log message.
@@ -36,10 +30,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        /* Define event handler for onClick to show snackbars */
+        /* Define event handler for clicking on the True/False Button */
         binding.trueButton.setOnClickListener{
             checkAnswer(true)
-
         }
 
         binding.falseButton.setOnClickListener{
@@ -48,9 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.nextButton.setOnClickListener{
             nextQuestion()
+
         }
 
-        updateQuestion()
+        //updateQuestion()
 
         // Set onClickListener for the TextView
         binding.questionTextview.setOnClickListener{
@@ -69,6 +63,8 @@ class MainActivity : AppCompatActivity() {
          */
         val questionTextResId = questionBank[currentIndex].textResID        // Access the text resource ID of the current Question object
         binding.questionTextview.setText(questionTextResId)
+
+        toggleBtnEnable()
     }
 
     private fun nextQuestion(){
@@ -80,6 +76,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
+        toggleBtnEnable()
+
         val correctAnswer = questionBank[currentIndex].answer           // Get the correct answer of appropriate question
 
         // Verify user's answer
@@ -91,6 +89,15 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
             .show()
+    }
+
+    /**
+     * Function to toggle (Enable/Disable) answer buttons
+     */
+    private fun toggleBtnEnable(){
+        binding.trueButton.isEnabled = !binding.trueButton.isEnabled
+        binding.falseButton.isEnabled = !binding.falseButton.isEnabled
+
     }
 
     override fun onStart(){
