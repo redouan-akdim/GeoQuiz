@@ -25,7 +25,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
         Question(R.string.question_asia, true)
     )
 
-    var currentIndex:Int
+    private var currentIndex:Int
         get() = savedStateHandle.get(CURRENT_INDEX_KEY)?:0
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
 
@@ -44,9 +44,9 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle): ViewModel()
     }
 
     /* Getter functions */
-    /*fun getCurrentIndex(): Int{
+    fun getIndex(): Int{
         return this.currentIndex
-    }*/
+    }
 
     fun getQuestionBankSize(): Int {
         return this.questionBank.size

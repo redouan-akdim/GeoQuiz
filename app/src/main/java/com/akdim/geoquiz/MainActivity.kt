@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
         // Compute score if last question is answered
         //if (quizViewModel.currentIndex == questionBank.size - 1){
-        if (quizViewModel.currentIndex == quizViewModel.getQuestionBankSize() - 1){
+        if (quizViewModel.getIndex() == quizViewModel.getQuestionBankSize() - 1){
             val formattedScore = String.format("%.1f %%",computeScore())            // Format the score accordingly
 
             // Display the formatted score in a Toast
