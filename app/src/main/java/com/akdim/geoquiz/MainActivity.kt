@@ -4,14 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.akdim.geoquiz.databinding.ActivityMainBinding
 
 private const val TAG = "Mainactivity"          // Define TAG for logging
 class MainActivity : AppCompatActivity() {
 
     private lateinit var  binding : ActivityMainBinding
+    private val quizViewModel: QuizViewModel by viewModels()
 
-    private val questionBank = listOf(
+    /*private val questionBank = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
         Question(R.string.question_mideast, false),
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
 
-    private var currentIndex = 0
+    private var currentIndex = 0*/
     private var counterRightAnswers = 0              // Counter of right answers
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        Log.d(TAG, "Got a  QuizViewModel:$quizViewModel")
 
         /* Define event handler for clicking on the True/False Button */
         binding.trueButton.setOnClickListener{
@@ -45,7 +47,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //updateQuestion()
+        // Show current questio
+        val questionTextResId = quizViewModel.currentQuestionText        // Access the text resource ID of the current Question object
+        binding.questionTextview.setText(questionTextResId)
 
         // Set onClickListener for the TextView
         binding.questionTextview.setOnClickListener{
@@ -53,7 +57,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.prevButton.setOnClickListener{
-            currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size       // Get the previous index of questionBank
+            //currentIndex = (currentIndex - 1 + questionBank.size) % questionBank.size       // Get the previous index of questionBank
+            quizViewModel.moveToPrev()
             updateQuestion()
         }
     }
@@ -62,7 +67,8 @@ class MainActivity : AppCompatActivity() {
         /**
          * Display the current question
          */
-        val questionTextResId = questionBank[currentIndex].textResID        // Access the text resource ID of the current Question object
+        //val questionTextResId = questionBank[currentIndex].textResID        // Access the text resource ID of the current Question object
+        val questionTextResId = quizViewModel.currentQuestionText        // Access the text resource ID of the current Question object
         binding.questionTextview.setText(questionTextResId)
 
         toggleBtnEnable()
@@ -72,14 +78,16 @@ class MainActivity : AppCompatActivity() {
      * Go to the next question and update it
      */
     private fun nextQuestion(){
-        currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
+        //currentIndex = (currentIndex + 1) % questionBank.size       // Get the next index of questionBank
+        quizViewModel.moveToNext()
         updateQuestion()
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
         toggleBtnEnable()
 
-        val correctAnswer = questionBank[currentIndex].answer           // Get the correct answer of appropriate question
+        //val correctAnswer = questionBank[currentIndex].answer           // Get the correct answer of appropriate question
+        val correctAnswer = quizViewModel.currentQuestionAnswer          // Get the correct answer of appropriate question
 
         // Verify user's answer
         val messageResId = if (userAnswer == correctAnswer) {
@@ -96,7 +104,8 @@ class MainActivity : AppCompatActivity() {
             .show()
 
         // Compute score if last question is answered
-        if (currentIndex == questionBank.size - 1){
+        //if (quizViewModel.currentIndex == questionBank.size - 1){
+        if (quizViewModel.currentIndex == quizViewModel.getQuestionBankSize() - 1){
             val formattedScore = String.format("%.1f %%",computeScore())            // Format the score accordingly
 
             // Display the formatted score in a Toast
@@ -119,7 +128,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun computeScore() : Float{
-        return counterRightAnswers.toFloat() / questionBank.size * 100
+        //return counterRightAnswers.toFloat() / questionBank.size * 100
+        return counterRightAnswers.toFloat() / quizViewModel.getQuestionBankSize() * 100
     }
 
     override fun onStart(){
