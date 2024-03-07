@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.akdim.geoquiz.databinding.ActivityMainBinding
+import kotlin.properties.Delegates
 
 private const val TAG = "Mainactivity"          // Define TAG for logging
 class MainActivity : AppCompatActivity() {
-
     private lateinit var  binding : ActivityMainBinding
     private val quizViewModel: QuizViewModel by viewModels()
 
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.isCheater =
                 result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
         }
+        Log.d(TAG, "YES")
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +90,9 @@ class MainActivity : AppCompatActivity() {
     private fun nextQuestion(){
         quizViewModel.moveToNext()
         updateQuestion()
+
+        quizViewModel.isCheater = false             // Reset cheater state for next question
+
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
